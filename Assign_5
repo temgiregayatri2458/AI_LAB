@@ -1,0 +1,69 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+def answer_questions():
+# Preprocess FAQ data
+faq_data = {
+"web application ": "This web application is designed to help
+you learn about investing, regardless of your experience level. We
+offer educational lessons, interactive games, and a fun way to build
+your financial knowledge.",
+"cost": "The web application is free to use! You can access a
+wide range of learning materials and games without any cost. We may
+offer optional features in the future.",
+"pay": "The web application is free to use! You can access a
+wide range of learning materials and games without any cost. We may
+offer optional features in the future.",
+"lesson structure": "Our lessons are organized by difficulty
+level (beginner, intermediate, advanced). Each lesson covers a
+specific investment topic and includes clear explanations, examples,
+and key takeaways.",
+"revisit": "Yes, you can replay any game as many times as you
+like. This is a great way to practice and improve your understanding
+of investment concepts.",
+"compatible": "The web application is compatible with most
+popular web browsers (e.g., Chrome, Firefox, Safari).",
+"internet": "An internet connection is required to access all
+features of the web application.",
+"support": "We're here to help! You can contact our support team
+through the web application's built-in messaging system or by emailing
+us at support@investsaga.com.",
+"help": "We're here to help! You can contact our support team
+through the web application's built-in messaging system or by emailing
+us at support@investsaga.com."
+}
+stop_words = set(stopwords.words('english'))
+lemmatizer = WordNetLemmatizer()
+while True:
+print("\nHi there! How can I help you today?")
+question = input("Enter your question: ")
+if(question == ""):
+print("\nThank you! Have a good day!")
+break;
+# Preprocess user question (lowercase, remove stopwords, and
+lemmatize)
+processed_question = [lemmatizer.lemmatize(word.lower()) for word
+in word_tokenize(question) if word not in stop_words]
+# Find the best matching FAQ entry
+found_match = False
+for keyword, answer in faq_data.items():
+# Lemmatize keyword for better matching
+lemmatized_keyword = [lemmatizer.lemmatize(key) for key in
+keyword.split()]
+# Check for any keyword match
+for key in lemmatized_keyword:
+if key in processed_question:
+found_match = True
+best_match = answer
+break # Exit inner loop if a match is found
+# Exit outer loop if a match is found already
+if found_match:
+break
+# Display answer
+if found_match:
+print(best_match)
+else:
+print("Sorry, I couldn't find an answer to your question. Try
+rephrasing or asking something else.")
+answer_questions()
