@@ -1,0 +1,111 @@
+import random
+
+# Dictionary containing symptoms and associated diseases
+symptom_diseases = {
+    "mild fever": ["common cold", "influenza", "COVID-19"],
+    "headache": ["migraine", "sinusitis"],
+    "back pain": ["muscle strain", "herniated disc"],
+    "cough": ["bronchitis", "pneumonia", "asthma"],
+    "sore throat": ["pharyngitis", "tonsillitis"],
+    "fatigue": ["anemia", "hypothyroidism"],
+    "chest pain": ["heart attack", "angina"],
+    "default": ["multiple diseases. It's important to consult a doctor for a proper diagnosis."]
+}
+
+# Responses to common health-related questions
+responses = {
+    "mild fever": [
+        "Make sure to rest and stay hydrated. You can take over-the-counter medication like acetaminophen or ibuprofen "
+        "to reduce fever. If symptoms persist or worsen, consult a doctor.",
+        "Try taking a lukewarm bath or using a cool compress to help reduce fever. "
+        "It's important to monitor your symptoms closely."
+    ],
+    "headache": [
+        "You can try taking some over-the-counter pain relievers like ibuprofen or acetaminophen. "
+        "Also, make sure you're staying hydrated and getting enough rest.",
+        "Massaging your temples and applying a cold compress to your forehead may also help alleviate the pain."
+    ],
+    "back pain": [
+        "Apply ice or heat to the affected area to reduce pain and inflammation. "
+        "You can also try gentle stretches and exercises to strengthen your back muscles.",
+        "Avoid lifting heavy objects and maintain good posture. If the pain persists, consult a healthcare professional."
+    ],
+    "cough": [
+        "Stay hydrated and get plenty of rest. Avoid irritants such as smoke and strong odors. "
+        "Over-the-counter cough medicine may help alleviate symptoms, but consult a doctor if it persists or worsens."
+    ],
+    "sore throat": [
+        "Gargling with warm salt water and drinking plenty of fluids can help soothe a sore throat. "
+        "Lozenges or throat sprays may also provide relief. If it persists, see a doctor.",
+        "Avoid smoking and exposure to secondhand smoke, as it can irritate the throat and worsen symptoms."
+    ],
+    "fatigue": [
+        "Ensure you're getting enough sleep and maintain a healthy diet rich in iron and vitamins. "
+        "Regular exercise can also help boost energy levels. If fatigue persists, consult a doctor.",
+        "Practice stress management techniques such as meditation and deep breathing exercises to reduce fatigue."
+    ],
+    "chest pain": [
+        "If you're experiencing chest pain, seek medical attention immediately as it could be a sign of a heart attack. "
+        "Avoid strenuous activity and try to remain calm until help arrives."
+    ],
+    "default": [
+        "I'm sorry, I'm not equipped to handle that question. Please consult a healthcare professional.",
+        "It's important to consult with a healthcare provider for personalized medical advice."
+    ],
+    "hello": [
+        "Hello! How can I assist you today?",
+        "Hi there! What health concerns do you have?"
+    ],
+    "bye": [
+        "Goodbye! Take care!",
+        "Have a great day!",
+        "Take care of yourself!"
+    ]
+}
+
+# Function to respond to user queries
+def respond(query):
+    query = query.lower()
+    for key in responses:
+        if key in query:
+            return random.choice(responses[key])
+    return random.choice(responses["default"])
+
+# Function to identify possible diseases based on symptoms
+def identify_disease(symptoms):
+    possible_diseases = []
+    for symptom in symptoms:
+        possible_diseases.extend(symptom_diseases.get(symptom, []))
+    return list(set(possible_diseases))
+
+# Main function to interact with the user
+def main():
+    print("Welcome to the Healthcare Chatbot!")
+    print("Ask me anything related to common health issues.")
+
+    while True:
+        user_input = input("You: ").strip()
+        if user_input.lower() == "exit":
+            print(random.choice(responses["bye"]))
+            break
+        elif user_input.lower() in ["hi", "hello"]:
+            response = random.choice(responses["hello"])
+            print("Chatbot:", response)
+        elif user_input.lower() == "thank you":
+            response = random.choice(responses["thank you"])
+            print("Chatbot:", response)
+        elif user_input.lower() == "symptoms":
+            symptoms = input("Please list your symptoms separated by commas: ").strip().lower().split(",")
+            possible_diseases = identify_disease(symptoms)
+            if possible_diseases:
+                print("Based on your symptoms, you may be suffering from:", ", ".join(possible_diseases))
+                for disease in possible_diseases:
+                    print("For", disease + ":", respond(disease))
+            else:
+                print("No specific disease could be identified based on the provided symptoms.")
+        else:
+            response = respond(user_input)
+            print("Chatbot:", response)
+
+if __name__ == "__main__":
+    main()
