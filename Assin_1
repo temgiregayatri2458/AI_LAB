@@ -1,0 +1,100 @@
+class Graph:
+    def __init__(self):
+        """
+        Initializes an empty graph represented using a dictionary.
+        The keys of the dictionary represent vertices, and the values
+        represent lists of adjacent vertices.
+        """
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        """
+        Adds an undirected edge between vertices 'u' and 'v'.
+        """
+        if u not in self.graph:  # Check if vertex 'u' is not already in the graph
+            self.graph[u] = []   # Initialize an empty list for vertex 'u' if not present
+        if v not in self.graph:  # Check if vertex 'v' is not already in the graph
+            self.graph[v] = []   # Initialize an empty list for vertex 'v' if not present
+        self.graph[u].append(v)  # Add vertex 'v' to the adjacency list of vertex 'u'
+        self.graph[v].append(u)  # Add vertex 'u' to the adjacency list of vertex 'v'
+
+    def dfs_util(self, v, visited):
+        """
+        Utility function for depth-first search (DFS) traversal.
+        """
+        visited.add(v)           # Mark the current vertex 'v' as visited
+        print(v, end=' ')        # Print the current vertex 'v'
+
+        for neighbor in self.graph[v]:  # Traverse through the adjacent vertices of vertex 'v'
+            if neighbor not in visited:  # Check if the neighbor is not visited
+                self.dfs_util(neighbor, visited)  # Recursively visit the unvisited neighbor
+
+    def dfs(self, start):
+        """
+        Performs depth-first search (DFS) traversal starting from the given vertex.
+        """
+        visited = set()  # Initialize a set to keep track of visited vertices
+        self.dfs_util(start, visited)  # Call the utility function to start DFS traversal
+
+    def bfs(self, start):
+        """
+        Performs breadth-first search (BFS) traversal starting from the given vertex.
+        """
+        visited = set()       # Initialize a set to keep track of visited vertices
+        queue = [start]       # Initialize a queue for BFS traversal starting with the start vertex
+        visited.add(start)   # Mark the start vertex as visited
+
+        while queue:  # Continue traversal until the queue is empty
+            v = queue.pop(0)    # Dequeue a vertex from the front of the queue
+            print(v, end=' ')   # Print the dequeued vertex
+
+            for neighbor in self.graph[v]:  # Traverse through the adjacent vertices of the dequeued vertex
+                if neighbor not in visited:  # Check if the neighbor is not visited
+                    queue.append(neighbor)  # Enqueue the unvisited neighbor
+                    visited.add(neighbor)   # Mark the neighbor as visited
+
+
+def menu():
+    """
+    Displays the menu options for selecting the traversal type.
+    """
+    print("\nMenu:")
+    print("1. Depth First Search (DFS)")
+    print("2. Breadth First Search (BFS)")
+    print("3. Exit")
+
+
+# Example Usage:
+if __name__ == "__main__":
+    g = Graph()  # Create an instance of the Graph class
+    while True:
+        menu()             # Display the menu options
+        choice = input("Enter your choice: ")  # Prompt the user for choice
+
+        if choice == '1':
+            num_edges = int(input("Enter the number of edges: "))  # Prompt for the number of edges
+            print("Enter the edges (source destination):")
+            for _ in range(num_edges):
+                edge = input().strip().split()  # Prompt for each edge and split source and destination
+                source, destination = edge[0], edge[1]
+                g.add_edge(source, destination)  # Add the edge to the graph
+            start_vertex = input("Enter the starting vertex for DFS traversal: ")  # Prompt for start vertex
+            print("DFS traversal:")
+            g.dfs(start_vertex)  # Perform DFS traversal starting from the given vertex
+            print()
+        elif choice == '2':
+            num_edges = int(input("Enter the number of edges: "))  # Prompt for the number of edges
+            print("Enter the edges (source destination):")
+            for _ in range(num_edges):
+                edge = input().strip().split()  # Prompt for each edge and split source and destination
+                source, destination = edge[0], edge[1]
+                g.add_edge(source, destination)  # Add the edge to the graph
+            start_vertex = input("Enter the starting vertex for BFS traversal: ")  # Prompt for start vertex
+            print("BFS traversal:")
+            g.bfs(start_vertex)  # Perform BFS traversal starting from the given vertex
+            print()
+        elif choice == '3':
+            print("Exiting the program.")
+            break  # Exit the loop and end the program
+        else:
+            print("Invalid choice! Please select again.")  # Display message for invalid choice
